@@ -9,7 +9,8 @@ export
     Pixel,
     Pattern,
     StackedPattern,
-    
+    Labels,
+
     # Export Draw
     drawnet,
 
