@@ -4,15 +4,13 @@ using Colors
 
 ## Pixel is the most elementary level for the neural network plots
 
-
 mutable struct Labels
-    height::Bool
-    width::Bool
-    depth::Bool
+    str::String
+    position::Point
 end
 
-function Labels(; height = false, width = false, depth = false)
-    return Labels(height, width, depth)
+function Labels(;str="", position = Point(0,0))
+    Labels(str, position)
 end
 
 mutable struct Pixel

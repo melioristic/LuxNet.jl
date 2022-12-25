@@ -14,6 +14,18 @@ function drawnet(pixel::Pixel)
 end
 
 function drawnet(pattern::Pattern)
+    padding = 5.0
+    if pattern.labels.height === true
+        print("We are here")
+        x = pattern.pixel.position.x - (pattern.pixel.w_scale*pattern.pixel.width*pattern.n_pixel_h)/2 -padding
+    
+        print(x)
+        y_start = pattern.pixel.position.y #- (pattern.pixel.h_scale*pattern.pixel.height*pattern.n_pixel_v)/2
+        y_end = pattern.pixel.position.y + (pattern.pixel.h_scale*pattern.pixel.height*pattern.n_pixel_v)
+        arrow(Point(x, y_start), Point(x, (y_start+y_end)/2), Point(x, (y_start+y_end)/2), Point(x, y_end), startarrow = true)
+    end
+
+
     for h_index = 1:pattern.n_pixel_h
         new_pattern = deepcopy(pattern)
 
@@ -35,6 +47,7 @@ function drawnet(pattern::Pattern)
             if size(pattern.color) == (pattern.n_pixel_v,)
                 new_pattern.pixel.color = pattern.color[v_index]
             end
+        
             drawnet(new_pattern.pixel)
         end
     end
