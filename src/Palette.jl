@@ -1,4 +1,5 @@
 using ColorSchemes
+using Colors
 
 base_palette = Dict(
     1 => "#29066B", 
@@ -12,4 +13,4 @@ base_palette = Dict(
 
     )
 
-base_scheme = ColorScheme([parse(Colorant, base_scheme[9-i]) for i in 2:8])
+base_scheme = ColorScheme([parse(Colorant, base_palette[9-i]) for i in 2:8])

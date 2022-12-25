@@ -2,7 +2,6 @@ using Luxor
 using ColorSchemes
 using Colors
 
-include("../palette.jl")
 
 
 ## Pixel is the most elementary level for the neural network plots
