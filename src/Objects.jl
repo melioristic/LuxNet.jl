@@ -5,12 +5,13 @@ using Colors
 ## Pixel is the most elementary level for the neural network plots
 
 mutable struct Labels
-    str::String
-    position::Point
+    str::Union{Nothing,String}
+    position::Union{Nothing,Point}
+    display::Bool
 end
 
-function Labels(;str="", position = Point(0,0))
-    Labels(str, position)
+function Labels(; str = nothing, position = nothing, display = true)
+    Labels(str, position, display)
 end
 
 mutable struct Pixel
@@ -77,6 +78,7 @@ mutable struct StackedPattern
     color::Array
     x_offset::Float16
     y_offset::Float16
+    labels::Labels
 end
 
 function StackedPattern(;
@@ -87,6 +89,7 @@ function StackedPattern(;
     y_offset_factor = 0.5,
     x = nothing,
     y = nothing,
+    labels = Labels(),
 )
     if !(x === nothing)
         x -=
@@ -104,5 +107,5 @@ function StackedPattern(;
 
         pattern.pixel.position = Point(pattern.pixel.position.x, y)
     end
-    return StackedPattern(pattern, n_stack, color, x_offset_factor, y_offset_factor)
+    return StackedPattern(pattern, n_stack, color, x_offset_factor, y_offset_factor, labels)
 end
