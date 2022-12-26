@@ -63,6 +63,9 @@ function drawnet(pattern::Pattern)
 
             if size(pattern.color) == (pattern.n_pixel_v,)
                 new_pattern.pixel.color = pattern.color[v_index]
+            elseif size(pattern.color) == (pattern.n_pixel_v, pattern.n_pixel_h)
+                new_pattern.pixel.color = pattern.color[v_index, h_index]
+ 
             end
 
             drawnet(new_pattern.pixel)
@@ -72,6 +75,8 @@ end
 
 
 function drawnet(stacked_pattern::StackedPattern)
+
+
     if stacked_pattern.labels.display === true
         if stacked_pattern.pattern.labels.str === nothing
             stacked_pattern.labels.str = "$(stacked_pattern.pattern.n_pixel_v) X $(stacked_pattern.pattern.n_pixel_h) X $(stacked_pattern.n_stack)"
