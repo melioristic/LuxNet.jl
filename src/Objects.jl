@@ -16,8 +16,8 @@ end
 
 mutable struct Pixel
     position::Point
-    height::Float16
-    width::Float16
+    height::Float64
+    width::Float64
     color::Colorant
     h_scale::Number
     w_scale::Number
@@ -41,8 +41,8 @@ end
 
 mutable struct Pattern
     pixel::Pixel
-    n_pixel_h::Int8
-    n_pixel_v::Int8
+    n_pixel_h::Int64
+    n_pixel_v::Int64
     color::Array
     labels::Labels
 end
@@ -108,4 +108,17 @@ function StackedPattern(;
         pattern.pixel.position = Point(pattern.pixel.position.x, y)
     end
     return StackedPattern(pattern, n_stack, color, x_offset_factor, y_offset_factor, labels)
+end
+
+
+mutable struct Link
+    start::Point
+    finish::Point
+
+    color::Colorant
+    thickness::Float64
+end 
+
+function Link(;start=Point(-50,0), finish = Point(0,0), color=base_scheme[7], thickness= 2)
+    Link(start, finish, color, thickness)
 end

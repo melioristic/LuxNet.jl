@@ -10,13 +10,18 @@ export
     Pattern,
     StackedPattern,
     Labels,
+    Link,
 
+    # E
     # Export Draw
     drawnet,
 
     # Export Utils
     add_alpha,
-    col_arr
+    col_arr,
+    leftmid,
+    rightmid
+
 
 include("Palette.jl")
 include("Objects.jl")

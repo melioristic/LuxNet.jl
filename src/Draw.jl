@@ -125,3 +125,7 @@ function drawnet(stacked_pattern::StackedPattern)
     end
 
 end
+
+function drawnet(link::Link)
+    arrow(link.start, link.finish)
+end

@@ -21,10 +21,31 @@ function width(s::StackedPattern)
     (s.pattern.n_pixel_h + s.n_stack * abs(s.x_offset))
 end
 
+function width(p::Pattern)
+    p.pixel.w_scale *
+    p.pixel.width *
+    p.n_pixel_h
+
+end
+
+function height(p::Pixel)
+    p.height*p.h_scale
+end
+
 function height(s::StackedPattern)
     s.pattern.pixel.h_scale *
     s.pattern.pixel.height *
     (s.pattern.n_pixel_v + s.n_stack * abs(s.y_offset))
+end
+
+function height(p::Pattern)
+    p.pixel.h_scale *
+    p.pixel.height *
+    p.n_pixel_v
+end
+
+function width(p::Pixel)
+    p.width*p.w_scale
 end
 
 function width(pattern::Pattern)
@@ -34,3 +55,25 @@ end
 function width(pixel::Pixel)
     pixel.width * pixel.w_scale
 end
+
+function rightmid(p::Pattern)
+    x = p.pixel.position.x+width(p)-width(p.pixel)/2
+    y = p.pixel.position.y+height(p)/2-height(p.pixel)/2
+
+    return Point(x, y)
+end
+
+function leftmid(p::Pattern)
+    x = p.pixel.position.x-width(p.pixel)/2
+    y = p.pixel.position.y+height(p)/2-height(p.pixel)/2
+
+    return Point(x, y)
+end
+# function rightmid(s::StackedPattern)
+# end
+
+# function leftmid(p::Pattern)
+# end
+
+# function leftmid(s::StackedPattern)
+# end
