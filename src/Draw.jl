@@ -76,7 +76,6 @@ end
 
 function drawnet(stacked_pattern::StackedPattern)
 
-
     if stacked_pattern.labels.display === true
         if stacked_pattern.pattern.labels.str === nothing
             stacked_pattern.labels.str = "$(stacked_pattern.pattern.n_pixel_v) X $(stacked_pattern.pattern.n_pixel_h) X $(stacked_pattern.n_stack)"
@@ -126,6 +125,8 @@ function drawnet(stacked_pattern::StackedPattern)
 
 end
 
-function drawnet(link::Link)
-    arrow(link.start, link.finish)
+function drawnet(link::HorizontalLink)
+    sethue(link.color)
+    arrow(link.start, link.c1, link.c2, link.finish, linewidth=link.linewidth, arrowheadlength = 15)
+    sethue("black")
 end

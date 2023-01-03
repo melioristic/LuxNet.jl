@@ -10,7 +10,7 @@ export
     Pattern,
     StackedPattern,
     Labels,
-    Link,
+    HorizontalLink,
 
     # E
     # Export Draw
