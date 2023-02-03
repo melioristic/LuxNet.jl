@@ -9,7 +9,7 @@ export
     Pixel,
     Pattern,
     StackedPattern,
-    Labels,
+    Label,
     HorizontalLink,
 
     # E

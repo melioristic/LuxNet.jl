@@ -15,27 +15,10 @@ function col_arr(n_elements_each, col...)
     return col_list
 end
 
-function width(s::StackedPattern)
-    s.pattern.pixel.w_scale *
-    s.pattern.pixel.width *
-    (s.pattern.n_pixel_h + s.n_stack * abs(s.x_offset))
-end
 
-function width(p::Pattern)
-    p.pixel.w_scale *
-    p.pixel.width *
-    p.n_pixel_h
-
-end
 
 function height(p::Pixel)
     p.height*p.h_scale
-end
-
-function height(s::StackedPattern)
-    s.pattern.pixel.h_scale *
-    s.pattern.pixel.height *
-    (s.pattern.n_pixel_v + s.n_stack * abs(s.y_offset))
 end
 
 function height(p::Pattern)
@@ -43,6 +26,13 @@ function height(p::Pattern)
     p.pixel.height *
     p.n_pixel_v
 end
+
+function height(s::StackedPattern)
+    s.pattern.pixel.h_scale *
+    s.pattern.pixel.height *
+    (s.pattern.n_pixel_v + s.n_stack * abs(s.y_offset_factor))
+end
+
 
 function width(p::Pixel)
     p.width*p.w_scale
@@ -55,7 +45,7 @@ end
 function width(s:: StackedPattern)
     s.pattern.pixel.w_scale *
     s.pattern.pixel.width *
-    (s.pattern.n_pixel_h + (s.n_stack-1) * abs(s.x_offset))
+    (s.pattern.n_pixel_h + (s.n_stack-1) * abs(s.x_offset_factor))
 end
 
 
@@ -67,10 +57,10 @@ function rightmid(p::Pattern)
 end
 
 function rightmid(s::StackedPattern)
-    if s.x_offset>0
-        x = s.pattern.pixel.position.x
+    if s.x_offset_factor>0
+        x = s.pattern.pixel.position.x + width(s.pattern.pixel)/2
     else
-        x = s.pattern.pixel.position.x +width(s)
+        x = s.pattern.pixel.position.x +width(s) - width(s.pattern.pixel)/2
     end
     y = s.pattern.pixel.position.y + height(s.pattern)/2 - (height(s) - height(s.pattern) )/2 
 
@@ -86,10 +76,10 @@ function leftmid(p::Pattern)
 end
 
 function leftmid(s::StackedPattern)
-    if s.x_offset>0
-        x = s.pattern.pixel.position.x - width(s)
+    if s.x_offset_factor>0
+        x = s.pattern.pixel.position.x - width(s) + width(s.pattern.pixel)/2
     else
-        x = s.pattern.pixel.position.x 
+        x = s.pattern.pixel.position.x - + width(s.pattern.pixel)/2
     end
     y = s.pattern.pixel.position.y + height(s.pattern)/2 - (height(s)-height(s.pattern))/2
     return Point(x, y)
