@@ -130,3 +130,10 @@ function drawnet(link::HorizontalLink)
     sethue("black")
 end
 
+function multilinetext(str_array, p)
+    p = Point(p.x, p.y - 8*size(str_array,1)+14)
+    for i in eachindex(str_array)
+        text(str_array[i], p)
+        p = Point(p.x, p.y+15)
+    end
+end

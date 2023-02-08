@@ -15,6 +15,7 @@ export
     # E
     # Export Draw
     drawnet,
+    multilinetext,
 
     # Export Utils
     add_alpha,
