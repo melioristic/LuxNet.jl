@@ -9,14 +9,20 @@ export
     Pixel,
     Pattern,
     StackedPattern,
-    Labels,
+    Label,
+    HorizontalLink,
 
+    # E
     # Export Draw
     drawnet,
+    multilinetext,
 
     # Export Utils
     add_alpha,
-    col_arr
+    col_arr,
+    leftmid,
+    rightmid
+
 
 include("Palette.jl")
 include("Objects.jl")

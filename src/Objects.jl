@@ -4,23 +4,24 @@ using Colors
 
 ## Pixel is the most elementary level for the neural network plots
 
-mutable struct Labels
-    str::String
-    position::Point
+mutable struct Label
+    str::Union{Nothing,String}
+    position::Union{Nothing,Point}
+    display::Bool
 end
 
-function Labels(;str="", position = Point(0,0))
-    Labels(str, position)
+function Label(; str = nothing, position = nothing, display = true)
+    Label(str, position, display)
 end
 
 mutable struct Pixel
     position::Point
-    height::Float16
-    width::Float16
+    height::Float64
+    width::Float64
     color::Colorant
     h_scale::Number
     w_scale::Number
-    labels::Labels
+    text_label::Label
 end
 
 function Pixel(;
@@ -30,9 +31,9 @@ function Pixel(;
     color = base_scheme[1],
     h_scale = 1,
     w_scale = 1,
-    labels = Labels(),
+    text_label = Label()
 )
-    return Pixel(position, height, width, color, h_scale, w_scale, labels)
+    return Pixel(position, height, width, color, h_scale, w_scale, text_label)
 end
 
 
@@ -40,10 +41,10 @@ end
 
 mutable struct Pattern
     pixel::Pixel
-    n_pixel_h::Int8
-    n_pixel_v::Int8
+    n_pixel_h::Int64
+    n_pixel_v::Int64
     color::Array
-    labels::Labels
+    text_label::Label
 end
 
 function Pattern(;
@@ -53,7 +54,7 @@ function Pattern(;
     color = [Pixel().color],
     x = nothing,
     y = nothing,
-    labels = Labels(),
+    text_label = Label()
 )
     if !(x === nothing)
         x -= (n_pixel_h * pixel.w_scale * pixel.width) / 2
@@ -65,7 +66,7 @@ function Pattern(;
         pixel.position = Point(pixel.position.x, y)
     end
 
-    Pattern(pixel, n_pixel_h, n_pixel_v, color, labels)
+    Pattern(pixel, n_pixel_h, n_pixel_v, color, text_label)
 end
 
 
@@ -73,10 +74,11 @@ end
 
 mutable struct StackedPattern
     pattern::Pattern
-    n_stack::Int8
+    n_stack::Int64
     color::Array
-    x_offset::Float16
-    y_offset::Float16
+    x_offset_factor::Float16
+    y_offset_factor::Float16
+    text_label::Label
 end
 
 function StackedPattern(;
@@ -87,6 +89,7 @@ function StackedPattern(;
     y_offset_factor = 0.5,
     x = nothing,
     y = nothing,
+    text_label = Label(),
 )
     if !(x === nothing)
         x -=
@@ -104,5 +107,27 @@ function StackedPattern(;
 
         pattern.pixel.position = Point(pattern.pixel.position.x, y)
     end
-    return StackedPattern(pattern, n_stack, color, x_offset_factor, y_offset_factor)
+    return StackedPattern(pattern, n_stack, color, x_offset_factor, y_offset_factor, text_label)
+end
+
+
+mutable struct HorizontalLink
+    start::Point
+    c1::Point
+    c2::Point
+    finish::Point
+    color::Colorant
+    linewidth::Float64
+end 
+
+function HorizontalLink(;start=Point(-50,-50), c1 = nothing, c2=nothing, finish = Point(50,50), color=base_scheme[7], linewidth= 3)
+    if c1===nothing
+        c1 = Point(start.x+3/4*(finish.x-start.x), start.y)
+    end
+
+    if c2 ===nothing
+        c2 = Point(start.x+1/4*(finish.x-start.x), finish.y)    
+    end
+
+    HorizontalLink(start, c1, c2, finish, color, linewidth)
 end
