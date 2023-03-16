@@ -10,8 +10,8 @@ mutable struct Label
     display::Bool
 end
 
-function Label(; str = nothing, position = nothing, display = true)
-    Label(str, position, display)
+function Label(; str=nothing, position=nothing, display=true)
+    return Label(str, position, display)
 end
 
 mutable struct Element
@@ -25,13 +25,13 @@ mutable struct Element
 end
 
 function Element(;
-    position = Point(0, 0),
-    height = 10,
-    width = 10,
-    color = base_scheme[1],
-    h_scale = 1,
-    w_scale = 1,
-    text_label = Label()
+    position=Point(0, 0),
+    height=10,
+    width=10,
+    color=base_scheme[1],
+    h_scale=1,
+    w_scale=1,
+    text_label=Label()
 )
     return Element(position, height, width, color, h_scale, w_scale, text_label)
 end
@@ -48,13 +48,13 @@ mutable struct Tensor2D
 end
 
 function Tensor2D(;
-    pixel = Element(),
-    n_pixel_h = 5,
-    n_pixel_v = 10,
-    color = [Element().color],
-    x = nothing,
-    y = nothing,
-    text_label = Label()
+    pixel=Element(),
+    n_pixel_h=5,
+    n_pixel_v=10,
+    color=[Element().color],
+    x=nothing,
+    y=nothing,
+    text_label=Label()
 )
     if !(x === nothing)
         x -= (n_pixel_h * pixel.w_scale * pixel.width) / 2
@@ -82,14 +82,14 @@ mutable struct Tensor3D
 end
 
 function Tensor3D(;
-    pattern = Tensor2D(),
-    n_stack = 3,
-    color = [base_scheme[6]],
-    x_offset_factor = 0.5,
-    y_offset_factor = 0.5,
-    x = nothing,
-    y = nothing,
-    text_label = Label(),
+    pattern=Tensor2D(),
+    n_stack=3,
+    color=[base_scheme[6]],
+    x_offset_factor=0.5,
+    y_offset_factor=0.5,
+    x=nothing,
+    y=nothing,
+    text_label=Label()
 )
     if !(x === nothing)
         x -=

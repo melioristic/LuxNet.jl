@@ -4,8 +4,6 @@ using Luxor
 using Colors
 using ColorSchemes
 
-
-
 export
 
     # Export Objects
