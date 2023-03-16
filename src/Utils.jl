@@ -17,8 +17,8 @@ end
 
 
 
-function height(p::Pixel)
-    p.height*p.h_scale
+function height(e::Element)
+    e.height*e.h_scale
 end
 
 function height(p::Pattern)
@@ -34,7 +34,7 @@ function height(s::StackedPattern)
 end
 
 
-function width(p::Pixel)
+function width(p::Element)
     p.width*p.w_scale
 end
 

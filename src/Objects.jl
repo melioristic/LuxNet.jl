@@ -2,7 +2,7 @@ using Luxor
 using ColorSchemes
 using Colors
 
-## Pixel is the most elementary level for the neural network plots
+## Element is the most elementary level for the neural network plots
 
 mutable struct Label
     str::Union{Nothing,String}
@@ -14,7 +14,7 @@ function Label(; str = nothing, position = nothing, display = true)
     Label(str, position, display)
 end
 
-mutable struct Pixel
+mutable struct Element
     position::Point
     height::Float64
     width::Float64
@@ -24,7 +24,7 @@ mutable struct Pixel
     text_label::Label
 end
 
-function Pixel(;
+function Element(;
     position = Point(0, 0),
     height = 10,
     width = 10,
@@ -33,25 +33,25 @@ function Pixel(;
     w_scale = 1,
     text_label = Label()
 )
-    return Pixel(position, height, width, color, h_scale, w_scale, text_label)
+    return Element(position, height, width, color, h_scale, w_scale, text_label)
 end
 
 
-## Pattern builds on pixlels, it can be 1-D or 2-D pattern
+## Tensor2D builds on pixlels, it can be 1-D or 2-D pattern
 
-mutable struct Pattern
-    pixel::Pixel
+mutable struct Tensor2D
+    pixel::Element
     n_pixel_h::Int64
     n_pixel_v::Int64
     color::Array
     text_label::Label
 end
 
-function Pattern(;
-    pixel = Pixel(),
+function Tensor2D(;
+    pixel = Element(),
     n_pixel_h = 5,
     n_pixel_v = 10,
-    color = [Pixel().color],
+    color = [Element().color],
     x = nothing,
     y = nothing,
     text_label = Label()
@@ -66,13 +66,13 @@ function Pattern(;
         pixel.position = Point(pixel.position.x, y)
     end
 
-    Pattern(pixel, n_pixel_h, n_pixel_v, color, text_label)
+    Tensor2D(pixel, n_pixel_h, n_pixel_v, color, text_label)
 end
 
 
-## StackedPattern is the a level higher than Pattern
+## Tensor3D is the a level higher than Tensor2D
 
-mutable struct StackedPattern
+mutable struct Tensor3D
     pattern::Pattern
     n_stack::Int64
     color::Array
@@ -81,8 +81,8 @@ mutable struct StackedPattern
     text_label::Label
 end
 
-function StackedPattern(;
-    pattern = Pattern(),
+function Tensor3D(;
+    pattern = Tensor2D(),
     n_stack = 3,
     color = [base_scheme[6]],
     x_offset_factor = 0.5,
@@ -107,27 +107,7 @@ function StackedPattern(;
 
         pattern.pixel.position = Point(pattern.pixel.position.x, y)
     end
-    return StackedPattern(pattern, n_stack, color, x_offset_factor, y_offset_factor, text_label)
+    return Tensor3D(pattern, n_stack, color, x_offset_factor, y_offset_factor, text_label)
 end
 
 
-mutable struct HorizontalLink
-    start::Point
-    c1::Point
-    c2::Point
-    finish::Point
-    color::Colorant
-    linewidth::Float64
-end 
-
-function HorizontalLink(;start=Point(-50,-50), c1 = nothing, c2=nothing, finish = Point(50,50), color=base_scheme[7], linewidth= 3)
-    if c1===nothing
-        c1 = Point(start.x+3/4*(finish.x-start.x), start.y)
-    end
-
-    if c2 ===nothing
-        c2 = Point(start.x+1/4*(finish.x-start.x), finish.y)    
-    end
-
-    HorizontalLink(start, c1, c2, finish, color, linewidth)
-end
