@@ -73,7 +73,7 @@ end
 ## Tensor3D is the a level higher than Tensor2D
 
 mutable struct Tensor3D
-    pattern::Pattern
+    pattern::Tensor2D
     n_stack::Int64
     color::Array
     x_offset_factor::Float16

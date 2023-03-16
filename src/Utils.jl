@@ -21,13 +21,13 @@ function height(e::Element)
     e.height*e.h_scale
 end
 
-function height(p::Pattern)
+function height(p::Tensor2D)
     p.pixel.h_scale *
     p.pixel.height *
     p.n_pixel_v
 end
 
-function height(s::StackedPattern)
+function height(s::Tensor3D)
     s.pattern.pixel.h_scale *
     s.pattern.pixel.height *
     (s.pattern.n_pixel_v + s.n_stack * abs(s.y_offset_factor))
@@ -38,25 +38,25 @@ function width(p::Element)
     p.width*p.w_scale
 end
 
-function width(pattern::Pattern)
+function width(pattern::Tensor2D)
     pattern.pixel.w_scale * pattern.pixel.width * pattern.n_pixel_h
 end
 
-function width(s:: StackedPattern)
+function width(s:: Tensor3D)
     s.pattern.pixel.w_scale *
     s.pattern.pixel.width *
     (s.pattern.n_pixel_h + (s.n_stack-1) * abs(s.x_offset_factor))
 end
 
 
-function rightmid(p::Pattern)
+function rightmid(p::Tensor2D)
     x = p.pixel.position.x+width(p)-width(p.pixel)/2
     y = p.pixel.position.y+height(p)/2
 
     return Point(x, y)
 end
 
-function rightmid(s::StackedPattern)
+function rightmid(s::Tensor3D)
     if s.x_offset_factor>0
         x = s.pattern.pixel.position.x + width(s.pattern.pixel)/2
     else
@@ -67,7 +67,7 @@ function rightmid(s::StackedPattern)
     return Point(x, y)
 end
 
-function leftmid(p::Pattern)
+function leftmid(p::Tensor2D)
 
     x = p.pixel.position.x-width(p.pixel)/2
     y = p.pixel.position.y+height(p)/2
@@ -75,7 +75,7 @@ function leftmid(p::Pattern)
     return Point(x, y)
 end
 
-function leftmid(s::StackedPattern)
+function leftmid(s::Tensor3D)
     if s.x_offset_factor>0
         x = s.pattern.pixel.position.x - width(s) + width(s.pattern.pixel)/2
     else
@@ -85,11 +85,11 @@ function leftmid(s::StackedPattern)
     return Point(x, y)
 end
 
-# function rightmid(s::StackedPattern)
+# function rightmid(s::Tensor3D)
 # end
 
-# function leftmid(p::Pattern)
+# function leftmid(p::Tensor2D)
 # end
 
-# function leftmid(s::StackedPattern)
+# function leftmid(s::Tensor3D)
 # end

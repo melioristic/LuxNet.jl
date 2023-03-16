@@ -1,4 +1,4 @@
-function drawnet(pixel::Pixel)
+function drawnet(pixel::Element)
     setline(1.0)
     setcolor(pixel.color)
     b = box(
@@ -13,7 +13,7 @@ function drawnet(pixel::Pixel)
     b
 end
 
-function drawnet(pattern::Pattern)
+function drawnet(pattern::Tensor2D)
     if pattern.text_label.display === true
 
         if pattern.text_label.str === nothing
@@ -74,7 +74,7 @@ function drawnet(pattern::Pattern)
 end
 
 
-function drawnet(stacked_pattern::StackedPattern)
+function drawnet(stacked_pattern::Tensor3D)
 
     if stacked_pattern.text_label.display === true
         if isnothing(stacked_pattern.text_label.str)
@@ -123,12 +123,14 @@ function drawnet(stacked_pattern::StackedPattern)
 
 end
 
-function drawnet(link::HorizontalLink)
-    # arrowheadangle = atan((link.finish.y-link.c2.y)/(link.finish.x-link.c2.x)) 
-    sethue(link.color)
-    arrow(link.start, link.c1, link.c2, link.finish, linewidth=link.linewidth, arrowheadlength = 15)
-    sethue("black")
-end
+## Check what happened here
+
+# function drawnet(link::HorizontalLink)
+#     # arrowheadangle = atan((link.finish.y-link.c2.y)/(link.finish.x-link.c2.x)) 
+#     sethue(link.color)
+#     arrow(link.start, link.c1, link.c2, link.finish, linewidth=link.linewidth, arrowheadlength = 15)
+#     sethue("black")
+# end
 
 function multilinetext(str_array, p)
     p = Point(p.x, p.y - 8*size(str_array,1)+14)

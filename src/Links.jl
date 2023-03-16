@@ -1,3 +1,7 @@
+using Luxor
+using ColorSchemes
+using Colors
+
 mutable struct HorizontalLink
     start::Point
     c1::Point
