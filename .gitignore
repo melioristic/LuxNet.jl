@@ -1,5 +1,4 @@
 /Manifest.toml
 
 # Remove VSCode dependencies
-
 .vscode
