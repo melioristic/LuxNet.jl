@@ -6,9 +6,8 @@ using ColorSchemes
 
 export
     # Export Objects
-    Pixel,
-    Pattern,
-    StackedPattern,
+    Tensor2D,
+    Tensor3D,
     Label,
     HorizontalLink,
 
@@ -28,5 +27,6 @@ include("Palette.jl")
 include("Objects.jl")
 include("Draw.jl")
 include("Utils.jl")
+include("Links.jl")
 
 end # module LuxNet
