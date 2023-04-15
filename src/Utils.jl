@@ -22,15 +22,15 @@ function height(e::Element)
 end
 
 function height(p::Tensor2D)
-    p.pixel.h_scale *
-    p.pixel.height *
-    p.n_pixel_v
+    p.element.h_scale *
+    p.element.height *
+    p.n_element_v
 end
 
 function height(s::Tensor3D)
-    s.pattern.pixel.h_scale *
-    s.pattern.pixel.height *
-    (s.pattern.n_pixel_v + s.n_stack * abs(s.y_offset_factor))
+    s.pattern.element.h_scale *
+    s.pattern.element.height *
+    (s.pattern.n_element_v + s.n_stack * abs(s.y_offset_factor))
 end
 
 
@@ -39,49 +39,49 @@ function width(p::Element)
 end
 
 function width(pattern::Tensor2D)
-    pattern.pixel.w_scale * pattern.pixel.width * pattern.n_pixel_h
+    pattern.element.w_scale * pattern.element.width * pattern.n_element_h
 end
 
 function width(s:: Tensor3D)
-    s.pattern.pixel.w_scale *
-    s.pattern.pixel.width *
-    (s.pattern.n_pixel_h + (s.n_stack-1) * abs(s.x_offset_factor))
+    s.pattern.element.w_scale *
+    s.pattern.element.width *
+    (s.pattern.n_element_h + (s.n_stack-1) * abs(s.x_offset_factor))
 end
 
 
 function rightmid(p::Tensor2D)
-    x = p.pixel.position.x+width(p)-width(p.pixel)/2
-    y = p.pixel.position.y+height(p)/2
+    x = p.element.position.x+width(p)-width(p.element)/2
+    y = p.element.position.y+height(p)/2
 
     return Point(x, y)
 end
 
 function rightmid(s::Tensor3D)
     if s.x_offset_factor>0
-        x = s.pattern.pixel.position.x + width(s.pattern.pixel)/2
+        x = s.pattern.element.position.x + width(s.pattern.element)/2
     else
-        x = s.pattern.pixel.position.x +width(s) - width(s.pattern.pixel)/2
+        x = s.pattern.element.position.x +width(s) - width(s.pattern.element)/2
     end
-    y = s.pattern.pixel.position.y + height(s.pattern)/2 - (height(s) - height(s.pattern) )/2 
+    y = s.pattern.element.position.y + height(s.pattern)/2 - (height(s) - height(s.pattern) )/2 
 
     return Point(x, y)
 end
 
 function leftmid(p::Tensor2D)
 
-    x = p.pixel.position.x-width(p.pixel)/2
-    y = p.pixel.position.y+height(p)/2
+    x = p.element.position.x-width(p.element)/2
+    y = p.element.position.y+height(p)/2
 
     return Point(x, y)
 end
 
 function leftmid(s::Tensor3D)
     if s.x_offset_factor>0
-        x = s.pattern.pixel.position.x - width(s) + width(s.pattern.pixel)/2
+        x = s.pattern.element.position.x - width(s) + width(s.pattern.element)/2
     else
-        x = s.pattern.pixel.position.x - + width(s.pattern.pixel)/2
+        x = s.pattern.element.position.x - + width(s.pattern.element)/2
     end
-    y = s.pattern.pixel.position.y + height(s.pattern)/2 - (height(s)-height(s.pattern))/2
+    y = s.pattern.element.position.y + height(s.pattern)/2 - (height(s)-height(s.pattern))/2
     return Point(x, y)
 end
 
