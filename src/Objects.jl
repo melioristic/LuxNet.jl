@@ -37,7 +37,7 @@ function Element(;
 end
 
 
-## Tensor2D builds on pixlels, it can be 1-D or 2-D pattern
+## Tensor2D builds on pixlels, it can be 1-D or 2-D tensor2D
 
 mutable struct Tensor2D
     element::Element
@@ -73,7 +73,7 @@ end
 ## Tensor3D is the a level higher than Tensor2D
 
 mutable struct Tensor3D
-    pattern::Tensor2D
+    tensor2D::Tensor2D
     n_stack::Int64
     color::Array
     x_offset_factor::Float16
@@ -82,7 +82,7 @@ mutable struct Tensor3D
 end
 
 function Tensor3D(;
-    pattern=Tensor2D(),
+    tensor2D=Tensor2D(),
     n_stack=3,
     color=[base_scheme[6]],
     x_offset_factor=0.5,
@@ -93,21 +93,21 @@ function Tensor3D(;
 )
     if !(x === nothing)
         x -=
-            pattern.element.w_scale *
-            pattern.element.width *
-            (pattern.n_element_h + n_stack * x_offset_factor) / 2
-        pattern.element.position = Point(x, pattern.element.position.y)
+            tensor2D.element.w_scale *
+            tensor2D.element.width *
+            (tensor2D.n_element_h + n_stack * x_offset_factor) / 2
+        tensor2D.element.position = Point(x, tensor2D.element.position.y)
     end
 
     if !(y === nothing)
         y -=
-            pattern.element.h_scale *
-            pattern.element.height *
-            (pattern.n_element_v + n_stack * y_offset_factor) / 2
+            tensor2D.element.h_scale *
+            tensor2D.element.height *
+            (tensor2D.n_element_v + n_stack * y_offset_factor) / 2
 
-        pattern.element.position = Point(pattern.element.position.x, y)
+        tensor2D.element.position = Point(tensor2D.element.position.x, y)
     end
-    return Tensor3D(pattern, n_stack, color, x_offset_factor, y_offset_factor, text_label)
+    return Tensor3D(tensor2D, n_stack, color, x_offset_factor, y_offset_factor, text_label)
 end
 
 Base.deepcopy(m::Element) = Element([ deepcopy(getfield(m, k)) for k = 1:length(fieldnames(Element)) ]...)
