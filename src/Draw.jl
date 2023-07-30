@@ -82,8 +82,9 @@ function drawnet(tensor3D::Tensor3D)
 
     if tensor3D.text_label.display === true
         if isnothing(tensor3D.text_label.str)
-            tensor3D.text_label.str = "$(tensor3D.base_tensor2D.n_element_v) X $(tensor3D.base_tensor2D.n_element_h) X $(tensor3D.n_stack)"
+            tensor3D.text_label.str = " $(tensor3D.base_tensor2D.n_element_h) X $(tensor3D.base_tensor2D.n_element_v) X $(tensor3D.n_stack)"
         end
+
         if (tensor3D.base_tensor2D.text_label.position === nothing)
             padding = 20
             y_bottom =
