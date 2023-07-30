@@ -37,10 +37,10 @@ function Element(;
 end
 
 
-## Tensor2D builds on pixlels, it can be 1-D or 2-D tensor2D
+## Tensor2D builds on elements, it can be 1-D or 2-D tensor2D
 
 mutable struct Tensor2D
-    element::Element
+    base_element::Element
     n_element_h::Int64
     n_element_v::Int64
     color::Array
@@ -48,32 +48,29 @@ mutable struct Tensor2D
 end
 
 function Tensor2D(;
-    element=Element(),
     n_element_h=5,
     n_element_v=10,
     color=[Element().color],
-    x=nothing,
-    y=nothing,
-    text_label=Label()
+    position = Point(0,0),
+    height = Element().height,
+    width = Element().width,
+    h_scale=Element().h_scale,
+    w_scale=Element().w_scale,
+    text_label = Label()
 )
-    if !(x === nothing)
-        x -= (n_element_h * element.w_scale * element.width) / 2
-        element.position = Point(x, element.position.y)
-    end
+    x = position.x - (n_element_h * w_scale * width) / 2    
+    y = position.y -  (n_element_v * h_scale * height) / 2
+    
+    base_element=Element(position = Point(x,y), height=height, width=width, h_scale=h_scale, w_scale=w_scale)
 
-    if !(y === nothing)
-        y -= (n_element_v * element.h_scale * element.height) / 2
-        element.position = Point(element.position.x, y)
-    end
-
-    Tensor2D(element, n_element_h, n_element_v, color, text_label)
+    Tensor2D(base_element, n_element_h, n_element_v, color, text_label)
 end
 
 
-## Tensor3D is the a level higher than Tensor2D
+## Tensor3D is a stack of Tensor2D
 
 mutable struct Tensor3D
-    tensor2D::Tensor2D
+    base_tensor2D::Tensor2D
     n_stack::Int64
     color::Array
     x_offset_factor::Float16
@@ -82,32 +79,35 @@ mutable struct Tensor3D
 end
 
 function Tensor3D(;
-    tensor2D=Tensor2D(),
     n_stack=3,
-    color=[base_scheme[6]],
+    n_element_h=5,
+    n_element_v=10,
+    color=[Element().color],
     x_offset_factor=0.5,
     y_offset_factor=0.5,
-    x=nothing,
-    y=nothing,
+    position = Point(0,0),
+    height = Element().height,
+    width = Element().width,
+    h_scale=Element().h_scale,
+    w_scale=Element().w_scale,
     text_label=Label()
 )
-    if !(x === nothing)
-        x -=
-            tensor2D.element.w_scale *
-            tensor2D.element.width *
-            (tensor2D.n_element_h + n_stack * x_offset_factor) / 2
-        tensor2D.element.position = Point(x, tensor2D.element.position.y)
-    end
+    x = position.x - w_scale * width * (n_stack * x_offset_factor) / 2
+        
+    y = position.y - h_scale * height * ( n_stack * y_offset_factor) / 2
 
-    if !(y === nothing)
-        y -=
-            tensor2D.element.h_scale *
-            tensor2D.element.height *
-            (tensor2D.n_element_v + n_stack * y_offset_factor) / 2
-
-        tensor2D.element.position = Point(tensor2D.element.position.x, y)
-    end
-    return Tensor3D(tensor2D, n_stack, color, x_offset_factor, y_offset_factor, text_label)
+    base_tensor2D = Tensor2D(n_element_h=n_element_h,
+        n_element_v=n_element_v,
+        color=color,
+        position = Point(x,y),
+        height = height,
+        width = width,
+        h_scale=h_scale,
+        w_scale=w_scale,
+        )
+        
+    
+    return Tensor3D(base_tensor2D, n_stack, color, x_offset_factor, y_offset_factor, text_label)
 end
 
 Base.deepcopy(m::Element) = Element([ deepcopy(getfield(m, k)) for k = 1:length(fieldnames(Element)) ]...)

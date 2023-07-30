@@ -1,8 +1,11 @@
 function drawnet(element::Element)
     setline(1.0)
     setcolor(element.color)
+
+    left_top = Point(element.position.x + (element.width * element.w_scale)/2, element.position.y + (element.height * element.h_scale)/2 )
+
     b = box(
-        element.position,
+        left_top,
         element.width * element.w_scale,
         element.height * element.h_scale,
         action = :fillpreserve,
@@ -24,22 +27,22 @@ function drawnet(tensor2D::Tensor2D)
         if (tensor2D.text_label.position === nothing)
             padding = 20
             y_bottom =
-                tensor2D.element.position.y +
-                (tensor2D.element.h_scale * tensor2D.element.height * tensor2D.n_element_v) +
+                tensor2D.base_element.position.y +
+                (tensor2D.base_element.h_scale * tensor2D.base_element.height * tensor2D.n_element_v) +
                 padding
 
-            x_mid = tensor2D.element.position.x + width(tensor2D) / 2 - width(tensor2D.element) / 2
+            x_mid = tensor2D.base_element.position.x + width(tensor2D) / 2 - width(tensor2D.base_element) / 2
 
             tensor2D.text_label.position =
                 Point(x_mid - 3.2 * length(tensor2D.text_label.str), y_bottom)
         end
 
         text(tensor2D.text_label.str, tensor2D.text_label.position)
-        # x = tensor2D.element.position.x - (tensor2D.element.w_scale*tensor2D.element.width*tensor2D.n_element_h)/2 -padding
+        # x = tensor2D.base_element.position.x - (tensor2D.base_element.w_scale*tensor2D.base_element.width*tensor2D.n_element_h)/2 -padding
 
         # print(x)
-        # y_start = tensor2D.element.position.y #- (tensor2D.element.h_scale*tensor2D.element.height*tensor2D.n_element_v)/2
-        # y_end = tensor2D.element.position.y + (tensor2D.element.h_scale*tensor2D.element.height*tensor2D.n_element_v)
+        # y_start = tensor2D.base_element.position.y #- (tensor2D.base_element.h_scale*tensor2D.base_element.height*tensor2D.n_element_v)/2
+        # y_end = tensor2D.base_element.position.y + (tensor2D.base_element.h_scale*tensor2D.base_element.height*tensor2D.n_element_v)
         # arrow(Point(x, y_start), Point(x, (y_start+y_end)/2), Point(x, (y_start+y_end)/2), Point(x, y_end), startarrow = true)
     end
 
@@ -48,28 +51,28 @@ function drawnet(tensor2D::Tensor2D)
         new_tensor2D = deepcopy(tensor2D)
 
         if size(tensor2D.color) == (1,)
-            new_tensor2D.element.color = tensor2D.color[1]
+            new_tensor2D.base_element.color = tensor2D.color[1]
         end
 
-        x = new_tensor2D.element.position.x
-        x += (h_index - 1) * new_tensor2D.element.w_scale * new_tensor2D.element.width
+        x = new_tensor2D.base_element.position.x
+        x += (h_index - 1) * new_tensor2D.base_element.w_scale * new_tensor2D.base_element.width
 
-        new_tensor2D.element.position = Point(x, new_tensor2D.element.position.y)
+        new_tensor2D.base_element.position = Point(x, new_tensor2D.base_element.position.y)
 
         for v_index = 1:tensor2D.n_element_v
             y =
-                tensor2D.element.position.y +
-                (v_index - 1) * tensor2D.element.h_scale * new_tensor2D.element.height
-            new_tensor2D.element.position = Point(new_tensor2D.element.position.x, y)
+                tensor2D.base_element.position.y +
+                (v_index - 1) * tensor2D.base_element.h_scale * new_tensor2D.base_element.height
+            new_tensor2D.base_element.position = Point(new_tensor2D.base_element.position.x, y)
 
             if size(tensor2D.color) == (tensor2D.n_element_v,)
-                new_tensor2D.element.color = tensor2D.color[v_index]
+                new_tensor2D.base_element.color = tensor2D.color[v_index]
             elseif size(tensor2D.color) == (tensor2D.n_element_v, tensor2D.n_element_h)
-                new_tensor2D.element.color = tensor2D.color[v_index, h_index]
+                new_tensor2D.base_element.color = tensor2D.color[v_index, h_index]
  
             end
 
-            drawnet(new_tensor2D.element)
+            drawnet(new_tensor2D.base_element)
         end
     end
 end
@@ -79,47 +82,47 @@ function drawnet(tensor3D::Tensor3D)
 
     if tensor3D.text_label.display === true
         if isnothing(tensor3D.text_label.str)
-            tensor3D.text_label.str = "$(tensor3D.tensor2D.n_element_v) X $(tensor3D.tensor2D.n_element_h) X $(tensor3D.n_stack)"
+            tensor3D.text_label.str = "$(tensor3D.base_tensor2D.n_element_v) X $(tensor3D.base_tensor2D.n_element_h) X $(tensor3D.n_stack)"
         end
-        if (tensor3D.tensor2D.text_label.position === nothing)
+        if (tensor3D.base_tensor2D.text_label.position === nothing)
             padding = 20
             y_bottom =
-                tensor3D.tensor2D.element.position.y + height(tensor3D) + padding
+                tensor3D.base_tensor2D.base_element.position.y + height(tensor3D) + padding
             x_mid =
-                tensor3D.tensor2D.element.position.x +
-                width(tensor3D.tensor2D) +
+                tensor3D.base_tensor2D.base_element.position.x +
+                width(tensor3D.base_tensor2D) +
                 tensor3D.x_offset_factor *
                 tensor3D.n_stack *
-                width(tensor3D.tensor2D.element) -
-                1.5 * width(tensor3D.tensor2D.element)
+                width(tensor3D.base_tensor2D.base_element) -
+                1.5 * width(tensor3D.base_tensor2D.base_element)
             tensor3D.text_label.position =
                 Point(x_mid - 3.2 * length(tensor3D.text_label.str), y_bottom)
         end
         text(tensor3D.text_label.str, tensor3D.text_label.position)
-        # x = tensor2D.element.position.x - (tensor2D.element.w_scale*tensor2D.element.width*tensor2D.n_element_h)/2 -padding
+        # x = tensor2D.base_element.position.x - (tensor2D.base_element.w_scale*tensor2D.base_element.width*tensor2D.n_element_h)/2 -padding
 
         # print(x)
-        # y_start = tensor2D.element.position.y #- (tensor2D.element.h_scale*tensor2D.element.height*tensor2D.n_element_v)/2
-        # y_end = tensor2D.element.position.y + (tensor2D.element.h_scale*tensor2D.element.height*tensor2D.n_element_v)
+        # y_start = tensor2D.base_element.position.y #- (tensor2D.base_element.h_scale*tensor2D.base_element.height*tensor2D.n_element_v)/2
+        # y_end = tensor2D.base_element.position.y + (tensor2D.base_element.h_scale*tensor2D.base_element.height*tensor2D.n_element_v)
         # arrow(Point(x, y_start), Point(x, (y_start+y_end)/2), Point(x, (y_start+y_end)/2), Point(x, y_end), startarrow = true)
     end
 
-    tensor3D.tensor2D.text_label.display = false
+    tensor3D.base_tensor2D.text_label.display = false
     for i = 1:tensor3D.n_stack
-        drawnet(tensor3D.tensor2D)
+        drawnet(tensor3D.base_tensor2D)
         x =
-            tensor3D.tensor2D.element.position.x +
-            tensor3D.tensor2D.element.width *
-            tensor3D.tensor2D.element.w_scale *
+            tensor3D.base_tensor2D.base_element.position.x +
+            tensor3D.base_tensor2D.base_element.width *
+            tensor3D.base_tensor2D.base_element.w_scale *
             tensor3D.x_offset_factor
         y =
-            tensor3D.tensor2D.element.position.y +
-            tensor3D.tensor2D.element.height *
-            tensor3D.tensor2D.element.h_scale *
+            tensor3D.base_tensor2D.base_element.position.y +
+            tensor3D.base_tensor2D.base_element.height *
+            tensor3D.base_tensor2D.base_element.h_scale *
             tensor3D.y_offset_factor
 
         new_point = Point((x, y))
-        tensor3D.tensor2D.element.position = new_point
+        tensor3D.base_tensor2D.base_element.position = new_point
     end
 
 end
