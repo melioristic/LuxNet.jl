@@ -92,9 +92,10 @@ function Tensor3D(;
     w_scale=Element().w_scale,
     text_label=Label()
 )
-    x = position.x - w_scale * width * (n_stack * x_offset_factor) / 2
-        
-    y = position.y - h_scale * height * ( n_stack * y_offset_factor) / 2
+
+    x = position.x - (w_scale * width * (n_stack - 1)  * x_offset_factor) / 2
+ 
+    y = position.y - (h_scale * height * ( n_stack -1) * y_offset_factor) / 2
 
     base_tensor2D = Tensor2D(n_element_h=n_element_h,
         n_element_v=n_element_v,

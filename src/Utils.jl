@@ -50,38 +50,57 @@ end
 
 
 function rightmid(p::Tensor2D)
-    x = p.base_element.position.x+width(p)-width(p.base_element)/2
+    x = p.base_element.position.x+width(p)
     y = p.base_element.position.y+height(p)/2
 
     return Point(x, y)
 end
 
 function rightmid(s::Tensor3D)
+
+    print(s.base_tensor2D.base_element.position)
+    print("===")
+    print( height(s.base_tensor2D))
+    print("===")
     if s.x_offset_factor>0
-        x = s.base_tensor2D.base_element.position.x + width(s.base_tensor2D.base_element)/2
+        x = s.base_tensor2D.base_element.position.x + width(s) 
     else
-        x = s.base_tensor2D.base_element.position.x +width(s) - width(s.base_tensor2D.base_element)/2
+        x = s.base_tensor2D.base_element.position.x + width(s.base_tensor2D)
     end
-    y = s.base_tensor2D.base_element.position.y + height(s.base_tensor2D)/2 - (height(s) - height(s.base_tensor2D) )/2 
+
+    if s.y_offset_factor>0
+        y = s.base_tensor2D.base_element.position.y + height(s.base_tensor2D)/2 + height(s.base_tensor2D.base_element)*( s.y_offset_factor*(s.n_stack - 1))/2 
+        
+    else
+        y = s.base_tensor2D.base_element.position.y + height(s.base_tensor2D) + (s.n_stack - 1) * height(s.base_tensor2D.base_element)*s.y_offset_factor
+    end
+
+    
 
     return Point(x, y)
 end
 
 function leftmid(p::Tensor2D)
 
-    x = p.base_element.position.x-width(p.base_element)/2
+    x = p.base_element.position.x
     y = p.base_element.position.y+height(p)/2
 
     return Point(x, y)
 end
 
 function leftmid(s::Tensor3D)
+    
     if s.x_offset_factor>0
-        x = s.base_tensor2D.base_element.position.x - width(s) + width(s.base_tensor2D.base_element)/2
+        x = s.base_tensor2D.base_element.position.x 
     else
-        x = s.base_tensor2D.base_element.position.x - + width(s.base_tensor2D.base_element)/2
+        x = s.base_tensor2D.base_element.position.x + width(s.base_tensor2D.base_element) * (s.n_stack-1) * s.x_offset_factor
     end
-    y = s.base_tensor2D.base_element.position.y + height(s.base_tensor2D)/2 - (height(s)-height(s.base_tensor2D))/2
+
+    if s.y_offset_factor>0
+        y = s.base_tensor2D.base_element.position.y + height(s.base_tensor2D)/2+ height(s.base_tensor2D.base_element)*( s.y_offset_factor*(s.n_stack - 1))/2 
+    else
+        y = s.base_tensor2D.base_element.position.x + width(s.base_tensor2D)
+    end
     return Point(x, y)
 end
 

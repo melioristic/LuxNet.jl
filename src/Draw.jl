@@ -109,33 +109,39 @@ function drawnet(tensor3D::Tensor3D)
     end
 
     tensor3D.base_tensor2D.text_label.display = false
+
+
     for i = 1:tensor3D.n_stack
-        drawnet(tensor3D.base_tensor2D)
+        new_tensor3D = deepcopy(tensor3D)
         x =
-            tensor3D.base_tensor2D.base_element.position.x +
+            tensor3D.base_tensor2D.base_element.position.x + 
+            (i-1)*
             tensor3D.base_tensor2D.base_element.width *
             tensor3D.base_tensor2D.base_element.w_scale *
             tensor3D.x_offset_factor
         y =
             tensor3D.base_tensor2D.base_element.position.y +
+            (i-1)*
             tensor3D.base_tensor2D.base_element.height *
             tensor3D.base_tensor2D.base_element.h_scale *
             tensor3D.y_offset_factor
 
         new_point = Point((x, y))
-        tensor3D.base_tensor2D.base_element.position = new_point
+        new_tensor3D.base_tensor2D.base_element.position = new_point
+        drawnet(new_tensor3D.base_tensor2D)
+
     end
 
 end
 
 ## Check what happened here
 
-# function drawnet(link::HorizontalLink)
-#     # arrowheadangle = atan((link.finish.y-link.c2.y)/(link.finish.x-link.c2.x)) 
-#     sethue(link.color)
-#     arrow(link.start, link.c1, link.c2, link.finish, linewidth=link.linewidth, arrowheadlength = 15)
-#     sethue("black")
-# end
+function drawnet(link::HorizontalLink)
+    # arrowheadangle = atan((link.finish.y-link.c2.y)/(link.finish.x-link.c2.x)) 
+    sethue(link.color)
+    arrow(link.start, link.c1, link.c2, link.finish, linewidth=link.linewidth, arrowheadlength = 15)
+    sethue("black")
+end
 
 function multilinetext(str_array, p)
     p = Point(p.x, p.y - 8*size(str_array,1)+14)

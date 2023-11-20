@@ -22,7 +22,7 @@ export
     add_alpha,
     col_arr,
     leftmid,
-    rightmid
+    rightmid,
 
     include("Palette.jl")
     include("Objects.jl")
