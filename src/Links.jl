@@ -11,6 +11,7 @@ mutable struct HorizontalLink
     linewidth::Float64
 end 
 
+
 function HorizontalLink(;start=Point(-50,-50), c1 = nothing, c2=nothing, finish = Point(50,50), color=base_scheme[7], linewidth= 3)
     if c1===nothing
         c1 = Point(start.x+3/4*(finish.x-start.x), start.y)

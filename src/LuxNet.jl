@@ -6,14 +6,17 @@ using ColorSchemes
 
 export
 
+    
+
     # Export Objects
     Element,
     Tensor2D,
     Tensor3D,
     Label,
+
+    # Export Links
     HorizontalLink,
 
-    # E
     # Export Draw
     drawnet,
     multilinetext,
@@ -22,13 +25,13 @@ export
     add_alpha,
     col_arr,
     leftmid,
-    rightmid,
+    rightmid
 
-    include("Palette.jl")
-    include("Objects.jl")
-    include("Draw.jl")
-    include("Utils.jl")
-    include("Links.jl")
+include("Palette.jl")
+include("Objects.jl")
+include("Links.jl")    
+include("Draw.jl")
+include("Utils.jl")
 
 
 end # module LuxNet
